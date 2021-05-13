@@ -134,3 +134,4 @@ dmypy.json
 utils/configs/config.ini
 utils/configs/config_backup.ini
 *.json
+*.html
