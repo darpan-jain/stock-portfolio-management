@@ -43,11 +43,11 @@ class Tracker:
 		symbols_list = updated_stock_prices[COMPANY_SYMBOL]
 		lg.app.info(f"Number of companies = {len(symbols_list)}")
 
-		tic = time.process_time()
+		tic = datetime.now()
 		_, curr_prices, total_traded_volume = self.fetch_stock_details(symbols_list)
-		toc = time.process_time()
+		toc = datetime.now()
 
-		lg.app.debug(f"Total time to fetch stock prices = {round((toc - tic) * 1000, 2)} ms")
+		lg.app.debug(f"Total time to fetch stock prices = {round((toc-tic).total_seconds(), 3)} secs")
 		if len(self.error_count) > 0:
 			lg.app.debug(f"Error encountered for {len(self.error_count)} companies: {self.error_count}")
 		updated_stock_prices[self.today] = curr_prices
