@@ -1,0 +1,4 @@
+pandas
+bsedata==0.4.0
+nsepy==0.8
+nsetools==1.0.11
