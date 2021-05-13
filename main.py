@@ -36,12 +36,12 @@ if __name__ == '__main__':
 				total_market_value, market_value_change, gainers, losers = track.analyse(shares_values)
 				email = Email(config,
 							  track.today,
-							  total_value = total_market_value,
-							  value_change = market_value_change,
-							  gainers = gainers,
-							  losers = losers,
-							  overall_gainers = overall_top_gainers,
-							).send()
+							  total_value=total_market_value,
+							  value_change=market_value_change,
+							  gainers=gainers,
+							  losers=losers,
+							  overall_gainers=overall_top_gainers,
+							  ).send()
 
 		# Only analyse portfolio
 		elif (mode == 'analyse'):

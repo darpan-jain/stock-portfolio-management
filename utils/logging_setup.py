@@ -2,6 +2,7 @@ import configparser
 import logging
 from logging.handlers import RotatingFileHandler
 
+
 class TracebackFilter(logging.Formatter):
 	def format(self, record):
 		record.exc_text = ''
@@ -10,10 +11,12 @@ class TracebackFilter(logging.Formatter):
 	def formatException(self, record):
 		return ''
 
+
 def read_cfg():
 	config = configparser.ConfigParser()
 	config.read('utils/configs/config.ini')
 	return config
+
 
 def setup_logger(logname, filename):
 	"""
@@ -53,5 +56,5 @@ def setup_logger(logname, filename):
 	# consoleHandler.setFormatter(TracebackFilter(log_format, datefmt='%m/%d/%Y %I:%M:%S %p'))
 	consoleHandler.setLevel(logging.DEBUG)
 	# if read_cfg().getboolean('PARAMETERS', 'stream handler'):
-		# logger.addHandler(consoleHandler)
+	# logger.addHandler(consoleHandler)
 	return logger

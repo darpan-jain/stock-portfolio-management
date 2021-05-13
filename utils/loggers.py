@@ -8,6 +8,7 @@ if not os.path.exists('logs'):
 app = setup_logger('app', './logs/app.log')
 thanos = setup_logger('thanos', './logs/thanos.log')
 
+
 def read_cfg():
 	config = configparser.ConfigParser()
 	config.read('utils/configs/config.ini')

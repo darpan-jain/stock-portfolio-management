@@ -61,7 +61,8 @@ class Tracker:
 		return updated_stock_prices, overall_top_gainers
 
 	def analyse(self, shares_value, update_date_in_config=True) -> (float, float, pd.DataFrame, pd.DataFrame):
-		lg.app.debug(f"Analysing updated stocks prices for {self.today} with update_data_in_config = {update_date_in_config}")
+		lg.app.debug(
+			f"Analysing updated stocks prices for {self.today} with update_data_in_config = {update_date_in_config}")
 		price_change = shares_value[self.today] - shares_value[self.last_update]
 		shares_value[PRICE_CHANGE] = round(price_change, 4)
 		shares_value[PERCENT_CHANGE] = round(((price_change / shares_value[self.last_update]) * 100), 2)
@@ -111,12 +112,12 @@ class Tracker:
 					updated_stock_prices = self.add_to_portfolio(symbol, new_companies[symbol],
 																 updated_stock_prices)
 
-				# Check if num of shares for existing company changes
-				# elif 0 < new_companies[symbol] != updated_stock_prices.loc(COMPANY_SYMBOL == symbol):
-				# 	lg.app.info(f"Number of shares for {symbol} to be changed from "
-				# 				f"{updated_stock_prices[COMPANY_SYMBOL][NUM_OF_SHARES]} to "
-				# 				f"{new_companies[symbol]}")
-				# 	updated_stock_prices = updated_stock_prices[COMPANY_SYMBOL][NUM_OF_SHARES] = new_companies[symbol]
+			# Check if num of shares for existing company changes
+			# elif 0 < new_companies[symbol] != updated_stock_prices.loc(COMPANY_SYMBOL == symbol):
+			# 	lg.app.info(f"Number of shares for {symbol} to be changed from "
+			# 				f"{updated_stock_prices[COMPANY_SYMBOL][NUM_OF_SHARES]} to "
+			# 				f"{new_companies[symbol]}")
+			# 	updated_stock_prices = updated_stock_prices[COMPANY_SYMBOL][NUM_OF_SHARES] = new_companies[symbol]
 
 			company_data = updated_stock_prices.filter([COMPANY_SYMBOL, COMPANY_NAME, NUM_OF_SHARES], axis=1)
 			updated_stock_prices.to_csv(f"{self.data_path}updated_stock_prices.csv", index=False, header=True)

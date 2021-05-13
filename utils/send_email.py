@@ -8,6 +8,7 @@ from email.mime.multipart import MIMEMultipart
 
 import utils.loggers as lg
 
+
 class Email:
 	def __init__(self, config, today, email_exists=False, **kwargs):
 		self.config = config
@@ -31,24 +32,24 @@ class Email:
 		self.receiver_address = [elem.strip().split(',') for elem in recipients][0]
 
 	def send(self):
-			attachment_name = self.config.get('EMAIL', 'attachment name')
-			message = MIMEMultipart()
-			message['From'] = self.sender_address
-			message['Subject'] = 'Stocks Portfolio Update'
-			message.attach(MIMEText(self.html_content, 'html'))
-			attach_file = open(f'{self.data_path}updated_stock_prices.csv', 'rb')
-			payload = MIMEBase('application', 'octate-stream')
-			payload.set_payload((attach_file).read())
-			encoders.encode_base64(payload)
-			payload.add_header('Content-Disposition', 'attachment', filename=attachment_name)
-			message.attach(payload)
+		attachment_name = self.config.get('EMAIL', 'attachment name')
+		message = MIMEMultipart()
+		message['From'] = self.sender_address
+		message['Subject'] = 'Stocks Portfolio Update'
+		message.attach(MIMEText(self.html_content, 'html'))
+		attach_file = open(f'{self.data_path}updated_stock_prices.csv', 'rb')
+		payload = MIMEBase('application', 'octate-stream')
+		payload.set_payload((attach_file).read())
+		encoders.encode_base64(payload)
+		payload.add_header('Content-Disposition', 'attachment', filename=attachment_name)
+		message.attach(payload)
 
-			session = smtplib.SMTP('smtp.gmail.com', 587)
-			session.starttls()  # enable security
-			session.login(self.sender_address, self.sender_pass)
-			session.sendmail(self.sender_address, self.receiver_address, message.as_string())
-			session.quit()
-			lg.app.info(f'Email update for {self.today} sent to {self.receiver_address}')
+		session = smtplib.SMTP('smtp.gmail.com', 587)
+		session.starttls()  # enable security
+		session.login(self.sender_address, self.sender_pass)
+		session.sendmail(self.sender_address, self.receiver_address, message.as_string())
+		session.quit()
+		lg.app.info(f'Email update for {self.today} sent to {self.receiver_address}')
 
 	def create_html(self):
 		if self.market_value_change < 0:
@@ -93,7 +94,7 @@ class Email:
 		if not os.path.exists(self.email_path):
 			os.mkdir(self.email_path)
 		filename = f"{self.email_path}/email_{self.today}.html"
-		with open(filename,"w+") as f:
+		with open(filename, "w+") as f:
 			f.write(self.html_content)
 		lg.app.debug(f'HTML for {self.today} stored on disk.')
 
@@ -105,14 +106,14 @@ class Email:
 				.render()
 				)
 
-		# html = (
-		# 	df.style
-		# 	  .format(percent)
-		# 	  .applymap(color_negative_red, subset=['col1', 'col2'])
-		# 	  .set_properties(**{'font-size': '9pt', 'font-family': 'Calibri'})
-		# 	  .bar(subset=['col4', 'col5'], color='lightblue')
-		# 	  .render()
-		# )
+	# html = (
+	# 	df.style
+	# 	  .format(percent)
+	# 	  .applymap(color_negative_red, subset=['col1', 'col2'])
+	# 	  .set_properties(**{'font-size': '9pt', 'font-family': 'Calibri'})
+	# 	  .bar(subset=['col4', 'col5'], color='lightblue')
+	# 	  .render()
+	# )
 
 	def color_negative_red(self, value):
 		"""
