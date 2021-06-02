@@ -10,7 +10,7 @@ import utils.loggers as lg
 ssl._create_default_https_context = ssl._create_unverified_context
 
 # Literal constants
-PRICE_CHANGE = "Price Change"
+DAILY_CHANGE = "Daily Change"
 PERCENT_CHANGE = "% Change"
 NUM_OF_SHARES = "Number of Shares"
 COMPANY_NAME = "Company Name"
@@ -47,7 +47,7 @@ class Tracker:
 		_, curr_prices, total_traded_volume = self.fetch_stock_details(symbols_list)
 		toc = datetime.now()
 
-		lg.app.debug(f"Total time to fetch stock prices = {round((toc-tic).total_seconds(), 3)} secs")
+		lg.app.debug(f"Total time to fetch stock prices = {round((toc - tic).total_seconds(), 3)} secs")
 		if len(self.error_count) > 0:
 			lg.app.debug(f"Error encountered for {len(self.error_count)} companies: {self.error_count}")
 		updated_stock_prices[self.today] = curr_prices
@@ -64,11 +64,11 @@ class Tracker:
 		lg.app.debug(
 			f"Analysing updated stocks prices for {self.today} with update_data_in_config = {update_date_in_config}")
 		price_change = shares_value[self.today] - shares_value[self.last_update]
-		shares_value[PRICE_CHANGE] = round(price_change, 4)
+		shares_value[DAILY_CHANGE] = round(price_change, 4)
 		shares_value[PERCENT_CHANGE] = round(((price_change / shares_value[self.last_update]) * 100), 2)
 
 		# Sort stocks based on percent change
-		shares_value = shares_value.sort_values(by=[PRICE_CHANGE], ascending=False)
+		shares_value = shares_value.sort_values(by=[DAILY_CHANGE], ascending=False)
 		total_market_value = round(sum(shares_value[self.today] * shares_value[NUM_OF_SHARES]), 2)
 		market_value_change = round(total_market_value - round(sum(shares_value[self.last_update] * shares_value[
 			NUM_OF_SHARES]), 2), 2)
@@ -89,9 +89,9 @@ class Tracker:
 		pd.set_option("colheader_justify", "center")
 
 		gainers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, PRICE_CHANGE,
-								PERCENT_CHANGE, VOLUME]].head(5)
+								PERCENT_CHANGE, VOLUME]].head(6)
 		losers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, PRICE_CHANGE,
-							   PERCENT_CHANGE, VOLUME]].tail(5)
+							   PERCENT_CHANGE, VOLUME]].tail(6)
 		lg.app.debug(f"Total market value today = ₹{total_market_value}")
 		lg.app.debug(f"Value update since {self.last_update} = ₹{market_value_change}")
 
@@ -136,7 +136,7 @@ class Tracker:
 				   COMPANY_SYMBOL: symbol,
 				   NUM_OF_SHARES: num_shares,
 				   self.last_update: last_price,
-				   PRICE_CHANGE: 0,
+				   DAILY_CHANGE: 0,
 				   PERCENT_CHANGE: 0,
 				   VOLUME: 0
 				   }
