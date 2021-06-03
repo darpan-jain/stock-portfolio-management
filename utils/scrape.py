@@ -88,9 +88,9 @@ class Tracker:
 		# Center justify headers in Dataframe
 		pd.set_option("colheader_justify", "center")
 
-		gainers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, PRICE_CHANGE,
+		gainers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, DAILY_CHANGE,
 								PERCENT_CHANGE, VOLUME]].head(6)
-		losers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, PRICE_CHANGE,
+		losers = shares_value[[COMPANY_NAME, NUM_OF_SHARES, self.last_update, self.today, DAILY_CHANGE,
 							   PERCENT_CHANGE, VOLUME]].tail(6)
 		lg.app.debug(f"Total market value today = ₹{total_market_value}")
 		lg.app.debug(f"Value update since {self.last_update} = ₹{market_value_change}")
